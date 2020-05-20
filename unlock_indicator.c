@@ -129,7 +129,7 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
         uint32_t rgb16[3] = {(strtol(strgroups[0], NULL, 16)),
                              (strtol(strgroups[1], NULL, 16)),
                              (strtol(strgroups[2], NULL, 16))};
-        cairo_set_source_rgb(xcb_ctx, rgb16[0] / 255.0, rgb16[1] / 255.0, rgb16[2] / 255.0);
+        cairo_set_source_rgba(xcb_ctx, rgb16[0] / 255.0, rgb16[1] / 255.0, rgb16[2] / 255.0, 0.7);
         cairo_rectangle(xcb_ctx, 0, 0, resolution[0], resolution[1]);
         cairo_fill(xcb_ctx);
     }
@@ -151,18 +151,19 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
         switch (auth_state) {
             case STATE_AUTH_VERIFY:
             case STATE_AUTH_LOCK:
-                cairo_set_source_rgba(ctx, 0, 114.0 / 255, 255.0 / 255, 0.75);
+                cairo_set_source_rgba(ctx, 0, 114.0 / 255, 255.0 / 255, 0.3);
                 break;
             case STATE_AUTH_WRONG:
             case STATE_I3LOCK_LOCK_FAILED:
-                cairo_set_source_rgba(ctx, 250.0 / 255, 0, 0, 0.75);
+                cairo_set_source_rgba(ctx, 250.0 / 255, 0, 0, 0.3);
                 break;
             default:
                 if (unlock_state == STATE_NOTHING_TO_DELETE) {
-                    cairo_set_source_rgba(ctx, 250.0 / 255, 0, 0, 0.75);
+                    cairo_set_source_rgba(ctx, 250.0 / 255, 0, 0, 0.2);
                     break;
                 }
-                cairo_set_source_rgba(ctx, 0, 0, 0, 0.75);
+                cairo_set_source_rgba(ctx, 0.5, 0.75, 0.5, 0.2);
+                
                 break;
         }
         cairo_fill_preserve(ctx);
@@ -170,35 +171,36 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
         switch (auth_state) {
             case STATE_AUTH_VERIFY:
             case STATE_AUTH_LOCK:
-                cairo_set_source_rgb(ctx, 51.0 / 255, 0, 250.0 / 255);
+                cairo_set_source_rgba(ctx, 51.0 / 255, 0, 250.0 / 255, 0.5);
                 break;
             case STATE_AUTH_WRONG:
             case STATE_I3LOCK_LOCK_FAILED:
-                cairo_set_source_rgb(ctx, 125.0 / 255, 51.0 / 255, 0);
+                cairo_set_source_rgba(ctx, 125.0 / 255, 51.0 / 255, 0, 0.5);
                 break;
             case STATE_AUTH_IDLE:
                 if (unlock_state == STATE_NOTHING_TO_DELETE) {
-                    cairo_set_source_rgb(ctx, 125.0 / 255, 51.0 / 255, 0);
+                    cairo_set_source_rgba(ctx, 125.0 / 255, 51.0 / 255, 0, 0.5);
                     break;
                 }
 
-                cairo_set_source_rgb(ctx, 51.0 / 255, 125.0 / 255, 0);
+                cairo_set_source_rgba(ctx, 51.0 / 255, 125.0 / 255, 0, 0.5);
                 break;
         }
         cairo_stroke(ctx);
 
         /* Draw an inner seperator line. */
-        cairo_set_source_rgb(ctx, 0, 0, 0);
-        cairo_set_line_width(ctx, 2.0);
-        cairo_arc(ctx,
-                  BUTTON_CENTER /* x */,
-                  BUTTON_CENTER /* y */,
-                  BUTTON_RADIUS - 5 /* radius */,
-                  0,
-                  2 * M_PI);
-        cairo_stroke(ctx);
+        
+        //cairo_set_source_rgb(ctx, 0, 0, 0);
+        //cairo_set_line_width(ctx, 2.0);
+        //cairo_arc(ctx,
+        //          BUTTON_CENTER /* x */,
+        //          BUTTON_CENTER /* y */,
+        //          BUTTON_RADIUS - 5 /* radius */,
+        //          0,
+        //          2 * M_PI);
+        //cairo_stroke(ctx);
 
-        cairo_set_line_width(ctx, 10.0);
+        //cairo_set_line_width(ctx, 10.0);
 
         /* Display a (centered) text of the current PAM state. */
         char *text = NULL;
@@ -281,10 +283,11 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
                       highlight_start + (M_PI / 3.0));
             if (unlock_state == STATE_KEY_ACTIVE) {
                 /* For normal keys, we use a lighter green. */
-                cairo_set_source_rgb(ctx, 51.0 / 255, 219.0 / 255, 0);
+                //cairo_set_source_rgba(ctx, 51.0 / 255, 219.0 / 255, 0, 1.0);
+                cairo_set_source_rgba(ctx, 7.0 / 255, 123.0 / 255, 75.0 / 255, 1.0);
             } else {
                 /* For backspace, we use red. */
-                cairo_set_source_rgb(ctx, 219.0 / 255, 51.0 / 255, 0);
+                cairo_set_source_rgba(ctx, 150.0 / 255, 50.0 / 255, 0, 1.0);
             }
             cairo_stroke(ctx);
 
@@ -297,14 +300,14 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
                       BUTTON_RADIUS /* radius */,
                       highlight_start /* start */,
                       highlight_start + (M_PI / 128.0) /* end */);
-            cairo_stroke(ctx);
+            //cairo_stroke(ctx);
             cairo_arc(ctx,
                       BUTTON_CENTER /* x */,
                       BUTTON_CENTER /* y */,
                       BUTTON_RADIUS /* radius */,
                       (highlight_start + (M_PI / 3.0)) - (M_PI / 128.0) /* start */,
                       highlight_start + (M_PI / 3.0) /* end */);
-            cairo_stroke(ctx);
+            //cairo_stroke(ctx);
         }
     }
 
